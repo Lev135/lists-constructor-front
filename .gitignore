@@ -1,5 +1,5 @@
 .parcel-cache
 .vscode
-node_modules/*
-dist/*
-elm-stuff/*
+node_modules
+dist
+elm-stuff
