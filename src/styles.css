@@ -1,11 +1,28 @@
-textarea, select, input[type=text] {
+* {
+  box-sizing: border-box;
+}
+
+.CodeMirror {
+  border: 1px solid #eee;
+  height: auto;
+}
+
+
+.latex-editor-input {
   width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
+  padding: 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  box-sizing: border-box;
+  resize: vertical;
+  float: left;
+}
+.latex-editor-preview {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  float: right;
 }
 
 input[type=submit] {
@@ -23,8 +40,27 @@ input[type=submit]:hover {
   background-color: #45a049;
 }
 
-.div-form {
+.container {
   border-radius: 5px;
   background-color: #f2f2f2;
   padding: 20px;
+}
+
+.col-25 {
+  float: left;
+  width: 25%;
+  margin-top: 6px;
+}
+
+.col-75 {
+  float: left;
+  width: 75%;
+  margin-top: 6px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
 }

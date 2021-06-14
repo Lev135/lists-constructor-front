@@ -1,9 +1,17 @@
 module Main exposing (..)
 
+import Html.Styled exposing (toUnstyled)
 import Browser
 import Html exposing(..)
 
 import MTask
+import LatexEditor
+
+viewL : LatexEditor.Model -> Browser.Document LatexEditor.Msg
+viewL model = {
+    title = "",
+    body = [toUnstyled <| LatexEditor.view model]
+  }
 
 view : MTask.Form -> Browser.Document MTask.Msg
 view model = {
@@ -13,8 +21,8 @@ view model = {
   
 main =
     Browser.document
-        { view = view
-        , update = MTask.update
-        , init = MTask.init
-        , subscriptions = \_ -> Sub.none
+        { view = viewL
+        , update = LatexEditor.update
+        , init = LatexEditor.init "ID"
+        , subscriptions = LatexEditor.subscriptions
         }
