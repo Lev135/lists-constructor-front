@@ -6,7 +6,7 @@ import Html.Events as Ev
 
 import Array as A exposing (Array)
 import Array.Extra as A
-import Maybe exposing (withDefault)
+-- import Maybe exposing (withDefault)
 
 -- Model
 type alias LatexString = String
@@ -115,10 +115,10 @@ viewForm : Form -> Html Msg
 viewForm form = 
   Html.div [] [
     Html.div [ Attr.class "div-form" ](
-      [
+      (
         statementFieldSet form
-      ]
-      ++ (A.toList <| A.indexedMap solutionFieldSet form.solutions)
+      )
+      :: (A.toList <| A.indexedMap solutionFieldSet form.solutions)
       ++ [
         Html.button [
           Attr.class "button-add", 

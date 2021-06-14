@@ -4,25 +4,21 @@ import Html.Styled exposing (toUnstyled)
 import Browser
 import Html exposing(..)
 
-import MTask
-import LatexEditor
+-- import MTask
+-- import LatexEditor
+import LatexList
 
-viewL : LatexEditor.Model -> Browser.Document LatexEditor.Msg
-viewL model = {
+documentView : (model -> Html msg) -> model -> Browser.Document msg
+documentView view model = {
     title = "",
-    body = [toUnstyled <| LatexEditor.view model]
+    body = [view model]
   }
 
-view : MTask.Form -> Browser.Document MTask.Msg
-view model = {
-    title = "",
-    body = [MTask.view model]  -- div [] <|  List.map viewRainBowEl rainbow
-  }
-  
+main : Program () LatexList.Model LatexList.Msg
 main =
     Browser.document
-        { view = viewL
-        , update = LatexEditor.update
-        , init = LatexEditor.init "ID"
-        , subscriptions = LatexEditor.subscriptions
+        { view = documentView <| LatexList.view >> toUnstyled
+        , update = LatexList.update
+        , init = LatexList.init
+        , subscriptions = LatexList.subscriptions
         }

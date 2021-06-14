@@ -24,7 +24,7 @@ app.ports.createEditor.subscribe(id => {
     const cm = CodeMirror.fromTextArea(document.getElementById(getEditorName(id)), cmOptions)
     cm.setSize(null, 100)
     cm.on("change", () => {
-      app.ports.onEdited.send(cm.getValue());
+      app.ports.onEdited.send(JSON.stringify({id, msg : cm.getValue()}));
     })
   }, 10)
 })

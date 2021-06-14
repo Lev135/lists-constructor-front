@@ -1,8 +1,9 @@
-port module LatexEditor exposing (Model, Msg, init, update, view, subscriptions)
+port module LatexEditor exposing (Model, Msg, init, update, view, subscriptions, subMsgDecoder)
 
 import Html.Styled as Html exposing(Html)
 import Html.Styled.Attributes as Attr
-import Html.Styled.Events as Ev
+
+import Json.Decode as JD
 
 import Css
 
@@ -38,7 +39,7 @@ update msg model = case msg of
 -- PORTS
 
 port createEditor : String -> Cmd msg
-port onEdited : (String -> msg) -> Sub msg
+-- port onEdited : (String -> msg) -> Sub msg
 
 -- VIEW
 view : Model -> Html Msg
@@ -72,5 +73,9 @@ viewPreview model =
 -- SUBSCRIPTIONS
 
 subscriptions : Model -> Sub Msg
-subscriptions _ = onEdited TextChanged 
+subscriptions _ = Sub.none -- onEdited TextChanged 
 
+subMsgDecoder : JD.Decoder ( Msg)
+subMsgDecoder = 
+  JD.map TextChanged
+    JD.string
