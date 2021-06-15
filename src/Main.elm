@@ -4,7 +4,7 @@ import Html.Styled exposing (toUnstyled)
 import Browser
 import Html exposing(..)
 
-import LatexList
+import Task.Create
 
 documentView : (model -> Html msg) -> model -> Browser.Document msg
 documentView view model = {
@@ -12,11 +12,11 @@ documentView view model = {
     body = [view model]
   }
 
-main : Program () LatexList.Model LatexList.Msg
+main : Program () Task.Create.Model Task.Create.Msg
 main =
     Browser.document
-        { view = documentView <| LatexList.view >> toUnstyled
-        , update = LatexList.update
-        , init = LatexList.init
-        , subscriptions = LatexList.subscriptions
+        { view = documentView <| Task.Create.view >> toUnstyled
+        , update = Task.Create.update
+        , init = \_ -> (Task.Create.init Task.Create.defaultSettings, Cmd.none)
+        , subscriptions = \_ -> Sub.none
         }

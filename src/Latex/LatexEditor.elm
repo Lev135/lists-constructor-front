@@ -1,4 +1,4 @@
-module LatexEditor exposing (Model, Msg, init, update, view)
+module Latex.LatexEditor exposing (Model, Settings, defaultSettings, Msg, init, update, view)
 
 import Html.Styled as Html exposing(Html, Attribute)
 import Html.Styled.Attributes as Attr
@@ -23,10 +23,10 @@ type alias Model = {
     settings : Settings
   }
 
-init : Model
-init = {
+init : Settings -> Model
+init settings = {
     text =  "",
-    settings = defaultSettings
+    settings = settings
   }
 
 -- UPDATE
@@ -49,7 +49,7 @@ view model =
 viewEditor : Model -> Html Msg
 viewEditor model = 
   Html.styled Html.div [
-      Css.width << Css.pc <| (100 - model.settings.previewWidth) * 0.90
+      Css.width << Css.pc <| (100 - model.settings.previewWidth) * 0.85
     ] [Attr.class "latex-editor-input"][
     latexArea [
       onTextChanged TextChanged
@@ -59,7 +59,7 @@ viewEditor model =
 viewPreview : Model -> Html Msg
 viewPreview model =
   Html.styled Html.div [
-      Css.width << Css.pc <| model.settings.previewWidth * 0.90
+      Css.width << Css.pc <| model.settings.previewWidth * 0.85
     ] [
     Attr.class "latex-editor-preview"
   ] [

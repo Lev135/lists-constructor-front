@@ -1,21 +1,29 @@
-module LatexList exposing (Model, Msg, init, update, view, subscriptions)
+module Latex.LatexList exposing (Model, Msg(..), init, update, view, subscriptions)
 
 import Array as A exposing (Array)
 import Array.Extra as A
 
 import Html.Styled as Html exposing(Html)
-import Html.Styled.Events as Ev
 
-import LatexEditor as Editor
+import Latex.LatexEditor as Editor
 
 -- MODEL
 
-type alias Model = {
-    editors : Array Editor.Model
+type alias Settings = {
+    editor : Editor.Settings
   }
 
-init : () -> (Model, Cmd a)
-init _ = ({ editors = A.empty }, Cmd.none)
+type alias Model = {
+    editors : Array Editor.Model,
+    settings : Settings
+  }
+
+
+init : Settings -> Int -> Model
+init settings count = {
+    editors  = A.repeat count <| Editor.init settings.editor, 
+    settings = settings
+  }
 
 -- UPDATE
 type Msg = AddEditor
@@ -37,15 +45,14 @@ updateEditor model i eMsg = case A.get i model.editors of
                   (model, Cmd.none)
 
 addEditor : Model -> (Model, Cmd Msg)
-addEditor model = ({ model | editors = A.push Editor.init model.editors }, Cmd.none)
+addEditor model = ({ model | editors = A.push (Editor.init model.settings.editor) model.editors }, Cmd.none)
 
 -- VIEW
 
 view : Model -> Html Msg
 view model = Html.div [] [
     Html.div [] 
-      (A.toList <| A.indexedMap editorView model.editors),
-    Html.button [ Ev.onClick AddEditor ] [ Html.text "Добавить редактор" ]
+      (A.toList <| A.indexedMap editorView model.editors)
   ]
   
 editorView : Int -> Editor.Model -> Html Msg

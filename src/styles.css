@@ -44,16 +44,13 @@ input[type=submit]:hover {
   padding: 20px;
 }
 
-.col-25 {
-  float: left;
-  width: 25%;
-  margin-top: 6px;
+.form-label {
+  padding-left: 20px;
 }
 
-.col-75 {
-  float: left;
-  width: 75%;
-  margin-top: 6px;
+.float-right {
+  float: right;
+  padding-right: 10pt;
 }
 
 /* Clear floats after the columns */
