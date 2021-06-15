@@ -1,4 +1,4 @@
-port module LatexList exposing (..)
+port module LatexList exposing (Model, Msg, init, update, view, subscriptions)
 
 import Array as A exposing (Array)
 import Array.Extra as A
@@ -70,12 +70,7 @@ editorView i = Html.map (EditorMsg i) << Editor.view
 -- SUBSCRIPTIONS
 
 subscriptions : Model -> Sub Msg
-subscriptions _ = onEdited EditorSubMsgReceived-- Sub.batch <| subscriptionsList model
-
-subscriptionsList : Model -> List (Sub Msg)
-subscriptionsList model =  A.toList <| A.indexedMap (\i -> (Sub.map (EditorMsg i) << Editor.subscriptions) ) model.editors
-
-
+subscriptions _ = onEdited EditorSubMsgReceived
 
 type EditorSubMsg = EditorSubMsg String Editor.Msg 
 

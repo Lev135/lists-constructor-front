@@ -4,8 +4,6 @@ import Html.Styled exposing (toUnstyled)
 import Browser
 import Html exposing(..)
 
--- import MTask
--- import LatexEditor
 import LatexList
 
 documentView : (model -> Html msg) -> model -> Browser.Document msg
