@@ -20,17 +20,28 @@ cmOptions = {
   lineNumbers : true
 }
 
-// Порт для инициализации CodeMirror на texterea по id 
-app.ports.createEditor.subscribe(id => {
-  setTimeout(() => {
-    const cm = CodeMirror.fromTextArea(document.getElementById(getEditorName(id)), cmOptions)
-    cm.setSize(null, 100)
-    cm.on("change", () => {
-      app.ports.onEdited.send(JSON.stringify({id, msg : cm.getValue()}));
-    })
-  }, 10)
-})
+// Веб-компонента для редактора LaTeX
+customElements.define('latex-area',
+    class extends HTMLElement {
+        constructor() { 
+          super();
+        }
+        connectedCallback() {
+          const cm = CodeMirror(elt => {
+            this.appendChild(elt);
+          }, cmOptions)
+          cm.on('change', () => {
+            this.dispatchEvent(textChanged(cm.getValue()))
+          })
+        }
+        attributeChangedCallback() {  }
+        static get observedAttributes() { return []; }
+    }
+);
 
-function getEditorName(id) {
-  return "latex-editor-input-" + id;
+// Custom'ное событие веб-компоненты 
+function textChanged(text) {
+  return new CustomEvent('textChanged', {
+    detail : text
+  })
 }

@@ -1,12 +1,12 @@
-module LatexEditor exposing (Model, Msg, init, update, view, subscriptions, subMsgDecoder)
+module LatexEditor exposing (Model, Msg, init, update, view)
 
-import Html.Styled as Html exposing(Html)
+import Html.Styled as Html exposing(Html, Attribute)
 import Html.Styled.Attributes as Attr
+import Html.Styled.Events as Ev
 
 import Json.Decode as JD
 
 import Css
-
 -- MODEL
 
 type alias Settings = {
@@ -24,12 +24,12 @@ type alias Model = {
     settings : Settings
   }
 
-init : String -> (String -> Cmd Msg) -> (Model, Cmd Msg)
-init id createEditorPort = ({
+init : String -> () -> (Model, Cmd Msg)
+init id _ = ({
     id = id,
     text =  "",
     settings = defaultSettings
-  }, createEditorPort id)
+  }, Cmd.none)
 
 -- UPDATE
 
@@ -53,8 +53,9 @@ viewEditor model =
   Html.styled Html.div [
       Css.width << Css.pc <| (100 - model.settings.previewWidth) * 0.90
     ] [Attr.class "latex-editor-input"][
-    Html.textarea [
-      Attr.id <| "latex-editor-input-" ++ model.id
+    latexArea [
+      Attr.id <| "latex-editor-input-" ++ model.id,
+      onTextChanged TextChanged
     ] []
   ]
 
@@ -66,15 +67,20 @@ viewPreview model =
     Attr.class "latex-editor-preview",
     Attr.id <| "latex-editor-preview-" ++ model.id 
   ] [
-    Html.text "Здесь будет предпросмотр скомпилированных блоков, когда я разберусь с парсером TeX'a"
+    Html.p [] [
+      Html.text "Здесь будет предпросмотр скомпилированных блоков, когда я разберусь с парсером TeX'a."
+    ],
+    Html.p [] [
+      Html.text <| "Вы ввели: " ++ model.text
+    ]
   ]
 
--- SUBSCRIPTIONS
+-- CUSTOM HTML
 
-subscriptions : Model -> Sub Msg
-subscriptions _ = Sub.none -- onEdited TextChanged 
+latexArea : List (Attribute msg) -> List (Html msg) -> Html msg
+latexArea =
+    Html.node "latex-area"
 
-subMsgDecoder : JD.Decoder ( Msg)
-subMsgDecoder = 
-  JD.map TextChanged
-    JD.string
+onTextChanged : (String -> msg) -> Attribute msg
+onTextChanged tagger = 
+  Ev.on "textChanged" <| JD.map tagger (JD.field "detail" JD.string)
