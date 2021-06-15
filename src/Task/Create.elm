@@ -1,4 +1,4 @@
-module Task.Create exposing (..)
+module Task.Create exposing (Settings, defaultSettings, Model, init, Msg(..), update, view)
 
 import Html.Styled as Html exposing(Html)
 import Html.Styled.Events as Ev
@@ -13,6 +13,7 @@ type alias Settings = {
     editor : Editor.Settings
   }
 
+defaultSettings : Settings
 defaultSettings = {
     editor = Editor.defaultSettings
   }
