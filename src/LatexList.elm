@@ -37,11 +37,7 @@ updateEditor model i eMsg = case A.get i model.editors of
                   (model, Cmd.none)
 
 addEditor : Model -> (Model, Cmd Msg)
-addEditor model = let (editor, eCmd) = Editor.init (String.fromInt << A.length <| model.editors) ()
-                  in  (
-                        { model | editors = A.push editor model.editors }, 
-                        Cmd.map (EditorMsg <| A.length model.editors - 1) eCmd
-                    )
+addEditor model = ({ model | editors = A.push Editor.init model.editors }, Cmd.none)
 
 -- VIEW
 

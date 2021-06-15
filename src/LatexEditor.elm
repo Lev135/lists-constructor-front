@@ -19,17 +19,15 @@ defaultSettings = {
   }
 
 type alias Model = {
-    id   : String,
     text : String,
     settings : Settings
   }
 
-init : String -> () -> (Model, Cmd Msg)
-init id _ = ({
-    id = id,
+init : Model
+init = {
     text =  "",
     settings = defaultSettings
-  }, Cmd.none)
+  }
 
 -- UPDATE
 
@@ -54,7 +52,6 @@ viewEditor model =
       Css.width << Css.pc <| (100 - model.settings.previewWidth) * 0.90
     ] [Attr.class "latex-editor-input"][
     latexArea [
-      Attr.id <| "latex-editor-input-" ++ model.id,
       onTextChanged TextChanged
     ] []
   ]
@@ -64,8 +61,7 @@ viewPreview model =
   Html.styled Html.div [
       Css.width << Css.pc <| model.settings.previewWidth * 0.90
     ] [
-    Attr.class "latex-editor-preview",
-    Attr.id <| "latex-editor-preview-" ++ model.id 
+    Attr.class "latex-editor-preview"
   ] [
     Html.p [] [
       Html.text "Здесь будет предпросмотр скомпилированных блоков, когда я разберусь с парсером TeX'a."
