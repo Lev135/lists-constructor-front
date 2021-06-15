@@ -42,7 +42,7 @@ updateEditor model i eMsg = case A.get i model.editors of
                   (model, Cmd.none)
 
 addEditor : Model -> (Model, Cmd Msg)
-addEditor model = let (editor, eCmd) = Editor.init (String.fromInt << A.length <| model.editors) ()
+addEditor model = let (editor, eCmd) = Editor.init (String.fromInt << A.length <| model.editors) createEditor
                   in  (
                         { model | editors = A.push editor model.editors }, 
                         Cmd.map (EditorMsg <| A.length model.editors - 1) eCmd
@@ -86,5 +86,5 @@ editorSubMsgDecoder =
     (JD.field "msg"  Editor.subMsgDecoder)
 
 -- PORTS
-
+port createEditor : String -> Cmd msg
 port onEdited : (String -> msg) -> Sub msg

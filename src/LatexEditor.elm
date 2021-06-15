@@ -1,4 +1,4 @@
-port module LatexEditor exposing (Model, Msg, init, update, view, subscriptions, subMsgDecoder)
+module LatexEditor exposing (Model, Msg, init, update, view, subscriptions, subMsgDecoder)
 
 import Html.Styled as Html exposing(Html)
 import Html.Styled.Attributes as Attr
@@ -24,8 +24,12 @@ type alias Model = {
     settings : Settings
   }
 
-init : String -> () -> (Model, Cmd a)
-init id _ = (Model id "" defaultSettings, createEditor id)
+init : String -> (String -> Cmd Msg) -> (Model, Cmd Msg)
+init id createEditorPort = ({
+    id = id,
+    text =  "",
+    settings = defaultSettings
+  }, createEditorPort id)
 
 -- UPDATE
 
@@ -35,11 +39,6 @@ type Msg =
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model = case msg of
   TextChanged str -> ({model | text = str }, Cmd.none)
-
--- PORTS
-
-port createEditor : String -> Cmd msg
--- port onEdited : (String -> msg) -> Sub msg
 
 -- VIEW
 view : Model -> Html Msg
