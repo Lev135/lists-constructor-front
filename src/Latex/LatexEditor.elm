@@ -49,7 +49,7 @@ view model =
 viewEditor : Model -> Html Msg
 viewEditor model = 
   Html.styled Html.div [
-      Css.width << Css.pc <| (100 - model.settings.previewWidth) * 0.85
+      Css.width << Css.pc <| (100 - model.settings.previewWidth) * 0.82
     ] [Attr.class "latex-editor-input"][
     latexArea [
       onTextChanged TextChanged
@@ -59,7 +59,7 @@ viewEditor model =
 viewPreview : Model -> Html Msg
 viewPreview model =
   Html.styled Html.div [
-      Css.width << Css.pc <| model.settings.previewWidth * 0.85
+      Css.width << Css.pc <| model.settings.previewWidth * 0.82
     ] [
     Attr.class "latex-editor-preview"
   ] [
