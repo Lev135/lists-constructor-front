@@ -6,16 +6,13 @@ import Html.Styled.Events as Ev
 
 import Json.Decode as JD
 
-import Css
 -- MODEL
 
 type alias Settings = {
-    previewWidth : Float
   }
 
 defaultSettings : Settings
 defaultSettings = {
-    previewWidth = 40
   }
 
 type alias Model = {
@@ -48,9 +45,7 @@ view model =
 
 viewEditor : Model -> Html Msg
 viewEditor model = 
-  Html.styled Html.div [
-      Css.width << Css.pc <| (100 - model.settings.previewWidth) * 0.82
-    ] [Attr.class "latex-editor-input"][
+  Html.div [Attr.class "latex-editor-input"][
     latexArea [
       onTextChanged TextChanged
     ] []
@@ -58,9 +53,7 @@ viewEditor model =
 
 viewPreview : Model -> Html Msg
 viewPreview model =
-  Html.styled Html.div [
-      Css.width << Css.pc <| model.settings.previewWidth * 0.82
-    ] [
+  Html.div [
     Attr.class "latex-editor-preview"
   ] [
     Html.p [] [
