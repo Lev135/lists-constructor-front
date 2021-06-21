@@ -11,6 +11,9 @@ import macros from "codemirror-latex-hint/lib/macros.json";
 
 CodeMirror.registerHelper("hint", "stex", (cm) => LaTeXHint(cm, macros));  
 
+// Пакет для работы с ShortCuts
+import "elm-keyboard-shortcut"
+
 // Инициализизация Elm приложения
 app = Elm.Main.init({ node: document.getElementById("root") });
 

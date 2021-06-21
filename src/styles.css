@@ -46,6 +46,7 @@ input[type=submit]:hover {
 
 .form-label {
   padding-left: 20px;
+  padding-right: 20px;
 }
 
 .float-right {
@@ -58,4 +59,24 @@ input[type=submit]:hover {
   content: "";
   display: table;
   clear: both;
+}
+
+.remark-type-block {
+  float : left;
+  width : 40%
+}
+
+.remark-label-block {
+  float : left;
+  width : 55%
+}
+.remark-type-input {
+  width : 95%
+}
+.remark-label-input {
+  width : 95%
+}
+
+.remove-button {
+  float : right
 }

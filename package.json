@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "codemirror": "^5.61.1",
-    "codemirror-latex-hint": "^1.0.4"
+    "codemirror-latex-hint": "^1.0.4",
+    "elm-keyboard-shortcut": "^1.0.1"
   }
 }
