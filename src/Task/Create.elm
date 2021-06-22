@@ -1,11 +1,9 @@
 module Task.Create exposing (Settings, defaultSettings, Model, init, Msg(..), update, view)
 
 import Html.Styled as Html exposing(Html)
-import Html.Styled.Events as Ev
 import Html.Styled.Attributes as Attr
 
 import Latex.LatexEditor as Editor
-import Latex.LatexList as LList
 
 import Array exposing (Array)
 import Task
@@ -35,10 +33,19 @@ remarkListInfo = {
     elName      = "примечание"
   }
 
+solutionListInfo : Editor.Settings -> ListEditor.Info Editor.Model Editor.Msg
+solutionListInfo settings = {
+    contId        = "solutions",
+    initVal       = Editor.init settings,
+    updateFunc    = Editor.update,
+    viewFunc      = Editor.view,
+    elName        = "решение"
+  }
+
 type alias Model = {
     statement : Editor.Model,
     answer    : Editor.Model,
-    solutions : LList.Model,
+    solutions : Array Editor.Model,
     remarks   : Array Remark.Model,
 
     settings  : Settings
@@ -48,7 +55,7 @@ init : Settings -> Model
 init settings = {
     statement = Editor.init settings.editor,
     answer    = Editor.init settings.editor,
-    solutions = LList.init {editor = settings.editor} 1,
+    solutions = ListEditor.init (solutionListInfo settings.editor) 1,
     remarks   = ListEditor.init remarkListInfo 0,
     settings  = settings
   } 
@@ -58,19 +65,19 @@ init settings = {
 type Msg
   = UpdateStatement Editor.Msg
   | UpdateAnswer    Editor.Msg
-  | UpdateSolutions LList.Msg
+  | SolutionListMsg (ListEditor.Msg Editor.Msg)
   | RemarkListMsg   (ListEditor.Msg Remark.Msg)
   | CtrlS
   | NoMsg
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model = case msg of
-  (UpdateStatement eMsg)  -> updateStatement eMsg model
-  (UpdateAnswer    eMsg)  -> updateAnswer eMsg model
-  (UpdateSolutions lMsg)  -> updateSolutions lMsg model
-  (RemarkListMsg  rlMsg)  -> updateRemarks rlMsg model 
-  CtrlS                   -> Debug.todo "Tab to next node on Ctrl+S"
-  NoMsg                   -> (model, Cmd.none)
+  (UpdateStatement eMsg)   -> updateStatement eMsg model
+  (UpdateAnswer    eMsg)   -> updateAnswer eMsg model
+  (SolutionListMsg slMsg)  -> updateSolutions slMsg model
+  (RemarkListMsg  rlMsg)   -> updateRemarks rlMsg model 
+  CtrlS                    -> Debug.todo "Tab to next node on Ctrl+S"
+  NoMsg                    -> (model, Cmd.none)
 
   
 
@@ -84,10 +91,10 @@ updateAnswer eMsg model
   = let (editor1, eMsg1) = Editor.update eMsg model.answer
     in  ({ model | answer = editor1 }, Cmd.map UpdateAnswer eMsg1)
 
-updateSolutions : LList.Msg -> Model -> (Model, Cmd Msg)
-updateSolutions lMsg model
-  = let (list1, lMsg1) = LList.update lMsg model.solutions
-    in ({ model | solutions = list1}, Cmd.map UpdateSolutions lMsg1)
+updateSolutions : ListEditor.Msg Editor.Msg -> Model -> (Model, Cmd Msg)
+updateSolutions lsMsg model
+  = let (list1, lMsg1) = ListEditor.update (solutionListInfo model.settings.editor) lsMsg model.solutions
+    in ({ model | solutions = list1}, Cmd.map SolutionListMsg lMsg1)
 
 updateRemarks : ListEditor.Msg Remark.Msg -> Model -> (Model, Cmd Msg)
 updateRemarks msg model 
@@ -103,22 +110,19 @@ view model = Html.div [ Attr.class "container" ] [
         Html.label [ Attr.class "form-label" ] [
           Html.text "Условие"
         ],
-        Html.map UpdateStatement <| Editor.view model.statement
+        Html.map UpdateStatement <| Editor.view "statement" model.statement
       ],
       Html.fieldset [] [
         Html.label [ Attr.class "form-label" ] [
           Html.text "Ответ"
         ],
-        Html.map UpdateAnswer <| Editor.view model.answer
+        Html.map UpdateAnswer <| Editor.view "answer" model.answer
       ],
       Html.fieldset [] [
         Html.label [Attr.class "form-label" ] [
           Html.text "Решения"
         ],
-        Html.map UpdateSolutions <| LList.view model.solutions,
-        Html.button [ Ev.onClick <| UpdateSolutions LList.AddEditor ] [
-          Html.text "Добавить решение"
-        ]
+        Html.map SolutionListMsg <| ListEditor.view (solutionListInfo model.settings.editor) model.solutions
       ],
       Html.fieldset [] [
         Html.label [ Attr.class "form-label" ] [

@@ -36,17 +36,18 @@ update msg model = case msg of
   TextChanged str -> ({model | text = str }, Cmd.none)
 
 -- VIEW
-view : Model -> Html Msg
-view model =
+view : String -> Model -> Html Msg
+view id model =
   Html.div [Attr.class "row"] [
-    viewEditor model,
+    viewEditor id,
     viewPreview model
   ]
 
-viewEditor : Model -> Html Msg
-viewEditor model = 
+viewEditor : String -> Html Msg
+viewEditor id = 
   Html.div [Attr.class "latex-editor-input"][
     latexArea [
+      Attr.id id,
       onTextChanged TextChanged
     ] []
   ]

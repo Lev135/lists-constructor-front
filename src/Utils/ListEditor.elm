@@ -39,7 +39,8 @@ update info msg = case msg of
   (ElMsg i elMsg)   -> updateElement info i elMsg
   AddElement        -> addElement info
   (RemoveElement i) -> removeElement i
-  (FocusError id)   -> Debug.todo <| "Не удаётся установить фокус на элемент: " ++ id
+  (FocusError id)   -> Debug.log ("Не удаётся установить фокус на элемент: " ++ id)
+                       (\m -> (m, Cmd.none))
   Focused           -> \m -> (m, Cmd.none)
 
 
@@ -71,7 +72,7 @@ focusOn id
 -- VIEW
 
 view : Info elModel elMsg -> Array elModel -> Html (Msg elMsg)
-view info model = Html.div [] [
+view info model = Html.div [ Attr.style "display" "inline" ] [
     case A.length model of
       0 -> viewEmpty
       1 -> case A.get 0 model of

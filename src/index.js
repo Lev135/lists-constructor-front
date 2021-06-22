@@ -36,6 +36,10 @@ customElements.define('latex-area',
           cm.on('change', () => {
             this.dispatchEvent(textChanged(cm.getValue()))
           })
+          this.tabIndex = -1
+          this.onfocus = event => {
+            cm.focus()
+          }
         }
         attributeChangedCallback() {  }
         static get observedAttributes() { return []; }
