@@ -72,39 +72,39 @@ focusOn id
 -- VIEW
 
 view : Info elModel elMsg -> Array elModel -> Html (Msg elMsg)
-view info model = Html.div [ Attr.style "display" "inline" ] [
+view info model = Html.div [ Attr.class "list-editor" ] <| (
     case A.length model of
-      0 -> viewEmpty
-      1 -> case A.get 0 model of
-                (Just el) -> viewOne info el
-                Nothing   -> Html.div [] []
+      0 -> [viewEmpty]
       _ -> viewMany info model
-    , Html.button [ Ev.onClick AddElement ] [
+    ) ++ [
+      Html.button [ Ev.onClick AddElement ] [
       Html.text <| "Добавить " ++ info.elName
     ]
   ]
 
 viewEmpty : Html msg
-viewEmpty = Html.label [ Attr.class "row" ] [Html.text "(пока что их нет)"]
+viewEmpty = Html.label [ Attr.class "list-editor" ] [Html.text "(пока что их нет)"]
 
-viewOne : Info elModel elMsg -> elModel -> Html (Msg elMsg)
-viewOne info = addRemoveButton 0 << elView info 0
-
-viewMany : Info elModel elMsg -> Array elModel -> Html (Msg elMsg)
-viewMany info = Html.div []
-  << A.toList 
-  << A.map (\m -> Html.fieldset [][ m ])
-  << A.indexedMap addRemoveButton 
+viewMany : Info elModel elMsg -> Array elModel -> List (Html (Msg elMsg))
+viewMany info 
+  =  A.toList
+  << A.indexedMap (makeElBlock False) 
   << A.indexedMap (elView info) 
 
-addRemoveButton : Int -> Html (Msg elMsg) -> Html (Msg elMsg)
-addRemoveButton i m = Html.div [ Attr.class "row" ] [
-    Html.button [
-        Attr.class "remove-button",
-        Ev.onClick <| RemoveElement i,
-        Attr.fromUnstyled <| AccessKey.tabbable False 
-      ] [ Html.text "X"],
-    Html.div [ Attr.class "removable-block" ] [m]
+makeElBlock : Bool -> Int -> Html (Msg elMsg) -> Html (Msg elMsg)
+makeElBlock unique i m = Html.div (
+        if unique 
+        then [ Attr.class "list-editor-elem" ] 
+        else [ Attr.class "list-editor-elem", Attr.class "unique" ]
+  )[
+    Html.div [ Attr.class "list-editor-buttons" ] [
+      Html.button [
+          Attr.class "list-editor-remove-button",
+          Ev.onClick <| RemoveElement i,
+          Attr.fromUnstyled <| AccessKey.tabbable False 
+        ] [ Html.text "X"]
+    ],
+    Html.div [ Attr.class "list-editor-content" ] [m]
   ]
 
 elView : Info elModel elMsg -> Int -> elModel -> Html (Msg elMsg)

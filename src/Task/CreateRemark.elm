@@ -34,33 +34,33 @@ update msg model =
 
 view : String -> Model -> Html Msg
 view id remark = Html.div [] [
-    Html.div [ Attr.class "row" ] [
-      Html.div [ Attr.class "remark-type-block" ] [
+    Html.div [ Attr.class "remark-block" ] [
+      Html.div [ Attr.class "remark-type" ] [
         Html.label [ 
           Attr.class "form-label"  
         ] [ Html.text "Тип" ],
         Html.input [ 
-          Attr.class "remark-type-input", 
+          Attr.class "remark-input", 
           Attr.type_ "text", 
           Ev.onInput TypeChanged, 
           Attr.value remark.typeR,
           Attr.id id
         ] []
       ],
-      Html.div [ Attr.class "remark-label-block" ] [
+      Html.div [ Attr.class "remark-label" ] [
         Html.label [ 
           Attr.class "form-label" 
         ] [ Html.text "Название" ],
         Html.input [ 
-          Attr.class "remark-label-input", 
+          Attr.class "remark-input", 
           Attr.type_ "text", 
           Ev.onInput LabelChanged, 
           Attr.value remark.label 
         ][]
       ]
     ],
-    Html.div [] [
+    Html.div [ Attr.class "remark-body" ] [
       Html.label [ Attr.class "form-label" ] [ Html.text "Body"],
-      Html.textarea [ Attr.style "width" "100%", Ev.onInput BodyChanged, Attr.value remark.body  ] []
+      Html.textarea [ Attr.class "remark-input", Ev.onInput BodyChanged, Attr.value remark.body  ] []
     ]
   ]

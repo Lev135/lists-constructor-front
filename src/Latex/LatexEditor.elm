@@ -38,15 +38,16 @@ update msg model = case msg of
 -- VIEW
 view : String -> Model -> Html Msg
 view id model =
-  Html.div [Attr.class "row"] [
+  Html.div [Attr.class "latex-editor"] [
     viewEditor id,
     viewPreview model
   ]
 
 viewEditor : String -> Html Msg
 viewEditor id = 
-  Html.div [Attr.class "latex-editor-input"][
+  Html.div [][
     latexArea [
+      Attr.class "latex-editor-input",
       Attr.id id,
       onTextChanged TextChanged
     ] []

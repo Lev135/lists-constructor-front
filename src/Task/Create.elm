@@ -8,8 +8,6 @@ import Latex.LatexEditor as Editor
 import Array exposing (Array)
 import Task
 
-import Shortcut
-
 import Utils.ListEditor as ListEditor
 import Task.CreateRemark as Remark
 
@@ -104,32 +102,30 @@ updateRemarks msg model
 -- VIEW
 
 view : Model -> Html Msg
-view model = Html.div [ Attr.class "container" ] [
-    Html.fromUnstyled <| Shortcut.shortcutElement [ Shortcut.ctrlShortcut (Shortcut.Regular "S") CtrlS ] [] <| List.map Html.toUnstyled [
-      Html.fieldset [] [
-        Html.label [ Attr.class "form-label" ] [
-          Html.text "Условие"
-        ],
-        Html.map UpdateStatement <| Editor.view "statement" model.statement
+view model = Html.div [ Attr.class "form" ] [
+    Html.div [ Attr.class "form-elem" ] [
+      Html.label [ Attr.class "form-label" ] [
+        Html.text "Условие"
       ],
-      Html.fieldset [] [
-        Html.label [ Attr.class "form-label" ] [
-          Html.text "Ответ"
-        ],
-        Html.map UpdateAnswer <| Editor.view "answer" model.answer
+      Html.map UpdateStatement <| Editor.view "statement" model.statement
+    ],
+    Html.div [ Attr.class "form-elem" ] [
+      Html.label [ Attr.class "form-label" ] [
+        Html.text "Ответ"
       ],
-      Html.fieldset [] [
-        Html.label [Attr.class "form-label" ] [
-          Html.text "Решения"
-        ],
-        Html.map SolutionListMsg <| ListEditor.view (solutionListInfo model.settings.editor) model.solutions
+      Html.map UpdateAnswer <| Editor.view "answer" model.answer
+    ],
+    Html.div [ Attr.class "form-elem" ] [
+      Html.label [Attr.class "form-label" ] [
+        Html.text "Решения"
       ],
-      Html.fieldset [] [
-        Html.label [ Attr.class "form-label" ] [
-          Html.text "Примечания"
-        ],
-        Html.map RemarkListMsg <| ListEditor.view remarkListInfo model.remarks
-      ]
+      Html.map SolutionListMsg <| ListEditor.view (solutionListInfo model.settings.editor) model.solutions
+    ],
+    Html.div [ Attr.class "form-elem" ] [
+      Html.label [ Attr.class "form-label" ] [
+        Html.text "Примечания"
+      ],
+      Html.map RemarkListMsg <| ListEditor.view remarkListInfo model.remarks
     ]
   ]
   
