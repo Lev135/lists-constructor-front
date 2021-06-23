@@ -58,12 +58,9 @@ viewPreview model =
   Html.div [
     Attr.class "latex-editor-preview"
   ] [
-    Html.p [] [
-      Html.text "Здесь будет предпросмотр скомпилированных блоков, когда я разберусь с парсером TeX'a."
-    ],
-    Html.p [] [
-      Html.text <| "Вы ввели: " ++ model.text
-    ]
+    latexPreview [
+      code model.text
+    ] []
   ]
 
 -- CUSTOM HTML
@@ -71,6 +68,12 @@ viewPreview model =
 latexArea : List (Attribute msg) -> List (Html msg) -> Html msg
 latexArea =
     Html.node "latex-area"
+
+latexPreview : List (Attribute msg) -> List (Html msg) -> Html msg
+latexPreview = Html.node "latex-preview"
+
+code : String -> Attribute msg
+code = Attr.attribute "code"
 
 onTextChanged : (String -> msg) -> Attribute msg
 onTextChanged tagger = 
