@@ -1,4 +1,4 @@
-module Main exposing (..)
+port module Main exposing (..)
 
 import Html.Styled exposing (toUnstyled)
 import Browser
@@ -17,6 +17,11 @@ main =
     Browser.document
         { view = documentView <| Task.Create.view >> toUnstyled
         , update = Task.Create.update
-        , init = \_ -> (Task.Create.init Task.Create.defaultSettings, Cmd.none)
-        , subscriptions = \_ -> Sub.none
+        , init = \_ -> (Task.Create.init Task.Create.defaultSettings sendMsg msgReceiver, Cmd.none)
+        , subscriptions = Task.Create.subscriptions
         }
+
+-- PORTS
+
+port sendMsg : String -> Cmd msg
+port msgReceiver : (String -> msg) -> Sub msg
